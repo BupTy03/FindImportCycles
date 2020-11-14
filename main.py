@@ -60,16 +60,13 @@ def main():
     pairs = set()
     for outerInfo in sourceFilesInfo:
         for interInfo in sourceFilesInfo:
-            if interInfo == outerInfo:
+            if interInfo == outerInfo or (interInfo.ModuleName, outerInfo.ModuleName) in pairs:
                 continue
 
             if outerInfo.ModuleName in outerInfo.ImportsList:
                 print("Error: module '{}' imports self".format(outerInfo.ModuleName))
 
-            if outerInfo.ModuleName in interInfo.ImportsList \
-                    and interInfo.ModuleName in outerInfo.ImportsList \
-                    and (outerInfo.ModuleName, interInfo.ModuleName) not in pairs \
-                    and (interInfo.ModuleName, outerInfo.ModuleName) not in pairs:
+            if outerInfo.ModuleName in interInfo.ImportsList and interInfo.ModuleName in outerInfo.ImportsList:
                 pairs.add((outerInfo.ModuleName, interInfo.ModuleName))
                 print("Error: modules '{}' and '{}' import each other".format(outerInfo.ModuleName, interInfo.ModuleName))
 
